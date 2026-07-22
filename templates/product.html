@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} — ShopLite{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('index') }}" class="back-link">← Back to products</a>
+
+<div class="product-detail">
+  <div class="product-detail__img">
+    <span class="product-detail__initial">{{ product.name[0] }}</span>
+  </div>
+  <div class="product-detail__info">
+    <span class="product-card__cat">{{ product.category }}</span>
+    <p class="product-detail__vendor">Vendor: {{ product.vendor }}</p>
+    <h1>{{ product.name }}</h1>
+    <p class="product-detail__desc">{{ product.description }}</p>
+    <p class="product-detail__stock">
+      {% if product.stock > 0 %}
+        <span class="in-stock">✓ In stock ({{ product.stock }} left)</span>
+      {% else %}
+        <span class="out-stock">✗ Out of stock</span>
+      {% endif %}
+    </p>
+    <p class="product-detail__price">Rs {{ "%.2f"|format(product.price) }}</p>
+
+    {% if product.stock > 0 %}
+    <form action="{{ url_for('add_to_cart') }}" method="POST" class="add-form">
+      <input type="hidden" name="product_id" value="{{ product._id }}" />
+      <div class="qty-row">
+        <label for="qty">Qty</label>
+        <input type="number" name="qty" id="qty" value="1" min="1" max="{{ product.stock }}" class="qty-input" />
+      </div>
+      <button type="submit" class="btn btn--primary btn--full">Add to Cart</button>
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

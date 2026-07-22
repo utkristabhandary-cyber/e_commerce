@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}ShopLite — Browse Products{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <h1>Products</h1>
+  <p class="subtitle">{{ products|length }} item{% if products|length != 1 %}s{% endif %} available</p>
+</section>
+
+<!-- Category filter -->
+<div class="filter-bar">
+  <a href="{{ url_for('index') }}" class="chip {% if not selected_category %}chip--active{% endif %}">All</a>
+  {% for cat in categories %}
+    <a href="{{ url_for('index', category=cat) }}"
+       class="chip {% if selected_category == cat %}chip--active{% endif %}">{{ cat }}</a>
+  {% endfor %}
+</div>
+
+<!-- Product grid -->
+{% if products %}
+  <div class="product-grid">
+    {% for p in products %}
+      <article class="product-card">
+        <div class="product-card__img">
+          <span class="product-card__initial">{{ p.name[0] }}</span>
+        </div>
+        <div class="product-card__body">
+          <span class="product-card__cat">{{ p.category }}</span>
+          <p class="product-card__vendor">{{ p.vendor }}</p>
+          <h2 class="product-card__name">{{ p.name }}</h2>
+          <p class="product-card__desc">{{ p.description }}</p>
+          <div class="product-card__footer">
+            <span class="product-card__price">Rs {{ "%.2f"|format(p.price) }}</span>
+            <a href="{{ url_for('product', product_id=p._id) }}" class="btn btn--sm">View</a>
+          </div>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-state">
+    <p>No products found in this category.</p>
+    <a href="{{ url_for('index') }}" class="btn">Browse all</a>
+  </div>
+{% endif %}
+{% endblock %}

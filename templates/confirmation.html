@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmed — ShopLite{% endblock %}
+
+{% block content %}
+<div class="confirmation">
+  <div class="confirmation__icon">✓</div>
+  <h1>Order Placed!</h1>
+  <p class="confirmation__sub">Thanks, <strong>{{ order.customer.name }}</strong>. Your order is confirmed.</p>
+  <p class="confirmation__id">Order ID: <code>{{ order._id }}</code></p>
+
+  <div class="confirmation__detail">
+    <h2>What you ordered</h2>
+    {% for item in order['items'] %}
+      <div class="checkout-item">
+        <span>{{ item.name }} × {{ item.qty }}</span>
+        <span>Rs {{ "%.2f"|format(item.price * item.qty) }}</span>
+      </div>
+    {% endfor %}
+    <div class="checkout-item checkout-item--total">
+      <span>Total charged</span>
+      <span>Rs {{ "%.2f"|format(order.total) }}</span>
+    </div>
+  </div>
+
+  <p class="confirmation__note">A confirmation will be sent to <strong>{{ order.customer.email }}</strong>.</p>
+  <a href="{{ url_for('index') }}" class="btn btn--primary">Keep shopping</a>
+</div>
+{% endblock %}

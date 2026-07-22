@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Checkout — ShopLite{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <h1>Checkout</h1>
+</section>
+
+{% if error %}
+  <div class="alert alert-error">{{ error }}</div>
+{% endif %}
+
+<div class="checkout-layout">
+  <form action="{{ url_for('checkout') }}" method="POST" class="checkout-form">
+    <h2>Delivery Details</h2>
+
+    <div class="form-group">
+      <label for="name">Full Name</label>
+      <input type="text" id="name" name="name" placeholder="Jane Doe" required />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="jane@example.com" required />
+    </div>
+
+    <div class="form-group">
+      <label for="address">Delivery Address</label>
+      <textarea id="address" name="address" rows="3" placeholder="Street, City, Postcode" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn--primary btn--full">Place Order</button>
+  </form>
+
+  <div class="checkout-summary">
+    <h2>Items</h2>
+    {% for item in cart.values() %}
+      <div class="checkout-item">
+        <span>{{ item.name }} × {{ item.qty }}</span>
+        <span>Rs {{ "%.2f"|format(item.price * item.qty) }}</span>
+      </div>
+    {% endfor %}
+    <div class="checkout-item checkout-item--total">
+      <span>Total</span>
+      <span>Rs {{ "%.2f"|format(total) }}</span>
+    </div>
+  </div>
+</div>
+{% endblock %}

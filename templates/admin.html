@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — ShopLite{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <h1>Admin Dashboard</h1>
+  <p class="subtitle">Overview of your store</p>
+</section>
+
+<!-- Stats Cards -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <span class="stat-label">Total Orders</span>
+    <span class="stat-value">{{ stats.total_orders }}</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">Total Revenue</span>
+    <span class="stat-value">Rs {{ "%.2f"|format(stats.total_revenue) }}</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">Total Products</span>
+    <span class="stat-value">{{ stats.total_products }}</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-label">Today's Orders</span>
+    <span class="stat-value">{{ stats.today_orders }}</span>
+  </div>
+</div>
+
+<!-- Orders Table -->
+<div class="admin-section">
+  <h2>All Orders</h2>
+
+  {% if orders %}
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th>Items</th>
+          <th>Total</th>
+          <th>Date & Time</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td><code class="order-id">{{ order._id[-8:] }}…</code></td>
+          <td><strong>{{ order.customer.name }}</strong></td>
+          <td>{{ order.customer.email }}</td>
+          <td class="address-cell">{{ order.customer.address }}</td>
+          <td>
+            <ul class="item-list">
+              {% for item in order['items'] %}
+                <li>{{ item.name }} × {{ item.qty }} — Rs {{ "%.2f"|format(item.price * item.qty) }}</li>
+              {% endfor %}
+            </ul>
+          </td>
+          <td><strong>Rs {{ "%.2f"|format(order.total) }}</strong></td>
+          <td class="date-cell">{{ order.placed_at.strftime('%b %d, %Y %I:%M %p') }}</td>
+          <td><span class="status-badge status--{{ order.status }}">{{ order.status }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <div class="empty-state"><p>No orders yet.</p></div>
+  {% endif %}
+</div>
+
+<!-- Products Table -->
+<div class="admin-section">
+  <h2>All Products</h2>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Vendor</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+        <tr>
+          <td><strong>{{ p.name }}</strong></td>
+          <td><span class="cat-tag">{{ p.category }}</span></td>
+          <td>{{ p.vendor }}</td>
+          <td>Rs {{ "%.2f"|format(p.price) }}</td>
+          <td>
+            <span class="stock-badge {% if p.stock > 10 %}stock--ok{% elif p.stock > 0 %}stock--low{% else %}stock--out{% endif %}">
+              {{ p.stock }} left
+            </span>
+          </td>
+          <td class="desc-cell">{{ p.description }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
