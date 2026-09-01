@@ -173,29 +173,6 @@ export MONGO_URI="mongodb://localhost:27017/"
 }
 ```
 
----
-
-## 📌 Future Improvements
-
-Some features planned for future development:
-
-- User authentication
-- Customer accounts
-- Admin dashboard
-- Product CRUD
-- Product search
-- Product categories
-- Wishlist
-- Order history
-- Payment gateway integration (Stripe)
-- Persistent shopping cart
-- Product images
-- Reviews and ratings
-- Email order confirmation
-- Responsive UI improvements
-
----
-
 ## 📚 What I Learned
 
 This project helped me gain practical experience with:
